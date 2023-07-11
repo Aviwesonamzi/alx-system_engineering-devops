@@ -1,0 +1,3 @@
+#!/bin/bash
+Name="BEST"
+Value="School"
