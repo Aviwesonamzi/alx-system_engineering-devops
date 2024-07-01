@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-SERVER="3.83.253.101"
-ssh -i $HOME/.ssh/school ubuntu@$SERVER
+SERVER="8.8.8.8"
+ssh -i ~/.ssh/school ubuntu@$SERVER
+
