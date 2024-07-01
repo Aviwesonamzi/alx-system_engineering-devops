@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Update package lists and install nginx with -y to automatically accept prompts
+sudo apt-get update -y
+sudo apt-get install nginx -y
+
+# Write the Hello World! HTML content to the default Nginx index.html
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+# Ensure Nginx is running and listening on port 80
+sudo service nginx start
+
+# Check if Nginx is already running, if not, start Nginx
+if ! pgrep -x "nginx" > /dev/null
+then
+    sudo service nginx start
+fi
+
+# Restart Nginx without using systemctl
+sudo service nginx restart
+
+# Ensure Nginx restarts properly
+if [ $? -ne 0 ]; then
+    echo "Nginx failed to start"
+    exit 1
+fi
+
+echo "Nginx installed and configured successfully."
