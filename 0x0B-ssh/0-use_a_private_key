@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# Connect to the server using the private key located in ~/.ssh/school
+
+# Define the server address
 SERVER="8.8.8.8"
+
+# Connect to the server using ssh with the private key
 ssh -i ~/.ssh/school ubuntu@$SERVER
+
 
