@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Update package lists and install nginx with -y to automatically accept prompts
+sudo apt-get update -y
+sudo apt-get install nginx -y
+
+# Create a backup of the default nginx configuration file
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup
+
+# Configure nginx to add the redirection
+sudo sed -i '/^\tlocation \/ {$/a \\t\tlocation /redirect_me {\n\t\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t\t}\n' /etc/nginx/sites-available/default
+
+# Ensure Nginx is running and listening on port 80
+sudo service nginx start
+
+# Check if Nginx is already running, if not, start Nginx
+if ! pgrep -x "nginx" > /dev/null
+then
+    sudo service nginx start
+fi
+
+# Restart Nginx without using systemctl
+sudo service nginx restart
+
+# Ensure Nginx restarts properly
+if [ $? -ne 0 ];
