@@ -1,0 +1,25 @@
+Hit:1 http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu focal InRelease
+Hit:2 http://archive.ubuntu.com/ubuntu focal InRelease
+Hit:3 http://security.ubuntu.com/ubuntu focal-security InRelease
+Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
+Hit:5 https://deb.nodesource.com/node_14.x focal InRelease
+Hit:6 http://apt.puppet.com focal InRelease
+Hit:7 http://archive.ubuntu.com/ubuntu focal-updates InRelease
+Hit:8 http://archive.ubuntu.com/ubuntu focal-backports InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+nginx is already the newest version (1.18.0-0ubuntu1.4).
+The following packages were automatically installed and are no longer required:
+  bridge-utils dns-root-data dnsmasq-base ubuntu-fan
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 251 not upgraded.
+sudo: ufw: command not found
+System has not been booted with systemd as init system (PID 1). Can't operate.
+Failed to connect to bus: Host is down
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable nginx
+System has not been booted with systemd as init system (PID 1). Can't operate.
+Failed to connect to bus: Host is down
+Nginx is not running. Please check the configuration and logs.
