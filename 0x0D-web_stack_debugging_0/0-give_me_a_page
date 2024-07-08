@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# This script attempts to start Docker, run a Docker container, install Apache, and serve a Hello Holberton page
+
+# Start Docker daemon
+echo "Starting Docker service..."
+sudo service docker start
+
+# Check if Docker started successfully
+if ! sudo service docker status | grep -q "active (running)"; then
+    echo "Docker service failed to start. Attempting to fix Docker installation..."
+
+    # Reinstall Docker
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+
+    # Set system limits and try starting Docker again
+    sudo sh -c 'echo "ULIMIT=\"-n 4096\"" >> /etc/default/docker'
+    sudo service docker restart
+
+    # Check if Docker is running
+    if ! sudo service docker status | grep -q "active (running)"; then
+        echo "Docker still not running. Please check Docker installation and logs."
+        exit 1
+    fi
+fi
+
+# Run the Docker container
+echo "Running Docker container..."
+container_id=$(sudo docker run -p 8080:80 -d -it holbertonschool/265-0)
+
+# Wait a few seconds to ensure the container is up
+sleep 5
+
+# Access the container and fix the issue
+sudo docker exec -it $container_id bash -c "
+    apt-get update && \
+    apt-get install -y apache2 && \
+    echo 'Hello Holberton' > /var/www/html/index.html && \
+    service apache2 start
+"
+
+# Verify the setup
+echo "Verifying Apache setup..."
+curl -s http://localhost:8080
+
