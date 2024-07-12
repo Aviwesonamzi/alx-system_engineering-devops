@@ -15,20 +15,6 @@ get_subdomain_info() {
     fi
 }
 
-# Function to check if a subdomain points to a specific IP
-check_subdomain_ip() {
-    local subdomain=$1
-    local expected_ip=$2
-    local result
-    result=$(dig +short "${subdomain}")
-
-    if [ "$result" = "$expected_ip" ]; then
-        echo "$expected_ip"
-    else
-        echo ""
-    fi
-}
-
 # Check if the domain argument is provided
 if [ -z "$1" ]; then
     echo "Usage: $0 <domain> [subdomain]"
@@ -44,14 +30,7 @@ expected_ips=("54.237.35.158" "54.237.35.158" "3.83.253.101" "54.84.151.192")
 if [ -n "$2" ]; then
     get_subdomain_info "$domain" "$2"
 else
-    for i in "${!subdomains[@]}"; do
-        subdomain="${subdomains[$i]}.${domain}"
-        expected_ip="${expected_ips[$i]}"
-        result=$(check_subdomain_ip "$subdomain" "$expected_ip")
-        if [ -n "$result" ]; then
-            echo "The subdomain ${subdomains[$i]} is a A record and points to ${result}"
-        else
-            echo "The subdomain ${subdomains[$i]} does not have an A record or does not point to the expected IP"
-        fi
+    for subdomain in "${subdomains[@]}"; do
+        get_subdomain_info "$domain" "$subdomain"
     done
 fi
