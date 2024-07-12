@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
-# Script that displays information about subdomains for a given domain
-audit_subdomain() {
-    local domain="$1"
-    local subdomain="$2"
+# This script audits subdomains of a given domain
 
-    if [[ -z "$subdomain" ]]; then
-        subdomains=("www" "54.237.35.158" "3.83.253.101" "54.84.151.192")
+function query_subdomain {
+    local subdomain=$1
+    local domain=$2
+    local result=$(dig +short "$subdomain.$domain")
+    
+    if [[ -z "$result" ]]; then
+        echo "No record found for $subdomain.$domain"
     else
-        subdomains=("$subdomain")
+        echo "The subdomain $subdomain is an A record and points to $result"
     fi
-
-    for sub in "${subdomains[@]}"; do
-        result=$(dig +short "$sub.$domain" | awk -v sub="$sub" \
-            '{ print "The subdomain " sub " is a " $1 " record and points to " $0 }')
-        echo "$result"
-    done
 }
 
-if [[ "$#" -lt 1 || "$#" -gt 2 ]]; then
-    echo "Usage: $0 <domain> [<subdomain>]"
-    exit 1
-fi
+domain=$1
+subdomain=$2
 
-audit_subdomain "$1" "$2"
+if [[ -z "$subdomain" ]]; then
+    for sub in www lb-01 web-01 web-02; do
+        query_subdomain "$sub" "$domain"
+    done
+else
+    query_subdomain "$subdomain" "$domain"
+fi
