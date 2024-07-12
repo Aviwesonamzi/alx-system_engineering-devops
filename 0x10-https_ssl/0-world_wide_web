@@ -5,9 +5,11 @@
 get_subdomain_info() {
     local domain=$1
     local subdomain=$2
-    result=$(dig "${subdomain}.${domain}" +short)
+    local result
+    result=$(dig +short "${subdomain}.${domain}")
+    
     if [ -n "$result" ]; then
-        echo "The subdomain ${subdomain} is an A record and points to ${result}"
+        echo "The subdomain ${subdomain} is a A record and points to ${result}"
     else
         echo "The subdomain ${subdomain} does not have an A record"
     fi
@@ -21,7 +23,7 @@ fi
 
 # Define the domain and subdomains
 domain=$1
-subdomains=("54.237.35.158" "54.237.35.158" "3.83.253.101" "54.84.151.192")
+subdomains=("www" "lb-01" "web-01" "web-02")
 
 # Check if a specific subdomain is provided
 if [ -n "$2" ]; then
