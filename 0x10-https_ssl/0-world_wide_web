@@ -23,7 +23,7 @@ fi
 
 # Define the domain and subdomains
 domain=$1
-subdomains=("www" "lb-01" "web-01" "web-02")
+subdomains=("54.237.35.158" "54.237.35.158" "3.83.253.101" "54.84.151.192")
 
 # Check if a specific subdomain is provided
 if [ -n "$2" ]; then
