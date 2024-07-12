@@ -1,37 +1,20 @@
 #!/usr/bin/env bash
-# This script configures a server to ensure Nginx is running and listening on port 80 of all the server's active IPv4 IPs.
+# Bash script that configures a server for Nginx to listen on port 80
 
-# Update package lists
-sudo apt-get update
+# Install Nginx (if not already installed)
+apt-get update
+apt-get -y install nginx
 
-# Install Nginx if it's not installed
-sudo apt-get install -y nginx
-
-# Ensure the Nginx default server block is configured to listen on port 80
-sudo sed -i 's/listen 80 default_server;/listen 80 default_server;/' /etc/nginx/sites-available/default
-sudo sed -i 's/listen \[::\]:80 default_server;/listen [::]:80 default_server;/' /etc/nginx/sites-available/default
-
-# Allow Nginx through the firewall if UFW is active
-if sudo ufw status | grep -qw active; then
-    sudo ufw allow 'Nginx Full'
-fi
-
-# Restart Nginx to apply changes
-sudo systemctl restart nginx
-
-# Ensure Nginx starts on boot
-sudo systemctl enable nginx
-
-# Check if Nginx is running
-if ! sudo systemctl is-active --quiet nginx; then
-    echo "Nginx is not running. Please check the configuration and logs."
-    exit 1
-fi
+# Ensure Nginx is stopped and restart to listen on port 80
+service nginx stop
+sleep 2  # Ensure Nginx fully stops before attempting to start again
+service nginx start
 
 # Check if Nginx is listening on port 80
-if ! sudo ss -tuln | grep -q ':80'; then
-    echo "Nginx is not listening on port 80. Please check the configuration."
-    exit 1
-fi
+CHECK=$(curl -s 0:80)
 
-echo "Nginx is running and listening on port 80."
+if [[ "$CHECK" =~ "Welcome to nginx" ]]; then
+    echo "Nginx is listening on port 80"
+else
+    echo "Nginx is NOT listening on port 80"
+fi
