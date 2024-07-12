@@ -7,7 +7,6 @@ get_subdomain_info() {
     local subdomain=$2
     local result
     result=$(dig +short "${subdomain}.${domain}")
-    echo "DEBUG: dig result for ${subdomain}.${domain} is '${result}'"
     
     if [ -n "$result" ]; then
         echo "The subdomain ${subdomain} is a A record and points to ${result}"
@@ -22,7 +21,6 @@ check_subdomain_ip() {
     local expected_ip=$2
     local result
     result=$(dig +short "${subdomain}")
-    echo "DEBUG: dig result for ${subdomain} is '${result}'"
 
     if [ "$result" = "$expected_ip" ]; then
         echo "$expected_ip"
