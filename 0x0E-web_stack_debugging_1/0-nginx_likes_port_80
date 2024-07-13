@@ -5,15 +5,12 @@
 apt-get update
 apt-get install -y nginx
 
-# Ensure Nginx service is enabled and running
+# Ensure Nginx service is running
 service nginx start
 
 # Modify Nginx configuration to listen on port 80 on all IPv4 IPs
-sed -i 's/listen \[::\]:80 default_server;/listen [::]:80 default_server;/g' /etc/nginx/sites-available/default
 sed -i 's/listen 80 default_server;/listen 0.0.0.0:80 default_server;/g' /etc/nginx/sites-available/default
+sed -i 's/listen \[::\]:80 default_server;/# listen \[::\]:80 default_server;/g' /etc/nginx/sites-available/default
 
 # Restart Nginx to apply the changes
 service nginx restart
-
-# Check Nginx status
-service nginx status
