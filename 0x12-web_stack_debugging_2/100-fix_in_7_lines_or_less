@@ -3,3 +3,4 @@
 id -u nginx &>/dev/null || useradd -r nginx
 sed -i 's/^user .*/user nginx;/; s/# *listen 80;/listen 8080;/; s/# *listen \[::\]:80;/listen \[::\]:8080;/' /etc/nginx/nginx.conf /etc/nginx/sites-available/default
 nginx -t && service nginx restart
+
