@@ -1,14 +1,15 @@
-# This Puppet manifest configures SSH client to use a private key and disable password authentication
+# Puppet manifest to configure SSH client to use specific private key and refuse password authentication
 
+# Ensure the 'IdentityFile' configuration is set
 file_line { 'Declare identity file':
-  path  => '/home/ubuntu/.ssh/config',
-  line  => 'IdentityFile ~/.ssh/school',
-  match => '^IdentityFile',
+  path  => '/etc/ssh/ssh_config',
+  line  => '  IdentityFile ~/.ssh/school',
+  match => '^  IdentityFile',
 }
 
+# Ensure password authentication is refused
 file_line { 'Turn off passwd auth':
-  path  => '/home/ubuntu/.ssh/config',
-  line  => 'PasswordAuthentication no',
-  match => '^PasswordAuthentication',
+  path  => '/etc/ssh/ssh_config',
+  line  => '  PasswordAuthentication no',
+  match => '^  PasswordAuthentication',
 }
-
