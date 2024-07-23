@@ -4,9 +4,32 @@
 # Update Nginx configuration to use the nginx user
 sed -i 's/user .*/user nginx;/g' /etc/nginx/nginx.conf
 
+# Check if the user update was successful
+if ! grep -q 'user nginx;' /etc/nginx/nginx.conf; then
+  echo "Failed to update user in /etc/nginx/nginx.conf"
+  exit 1
+fi
+
 # Update Nginx configuration to listen on port 8080
 sed -i 's/listen 80 default_server;/listen 8080 default_server;/g' /etc/nginx/sites-available/default
 sed -i 's/listen \[::\]:80 default_server;/listen \[::\]:8080 default_server;/g' /etc/nginx/sites-available/default
 
+# Check if the port update was successful
+if ! grep -q 'listen 8080 default_server;' /etc/nginx/sites-available/default; then
+  echo "Failed to update port in /etc/nginx/sites-available/default"
+  exit 1
+fi
+
+# Check Nginx configuration syntax
+if ! nginx -t; then
+  echo "Nginx configuration syntax error"
+  exit 1
+fi
+
 # Restart Nginx to apply the changes
-service nginx restart
+if ! service nginx restart; then
+  echo "Failed to restart Nginx"
+  exit 1
+fi
+
+echo "Nginx successfully configured to run as the nginx user and listen on port 8080"
