@@ -1,35 +1,39 @@
+#!/usr/bin/python3
 import json
 import requests
 
-# API endpoints
-users_url = "https://jsonplaceholder.typicode.com/users"
-todos_url = "https://jsonplaceholder.typicode.com/todos"
+def fetch_data():
+    # Base URL for API
+    base_url = 'https://jsonplaceholder.typicode.com'
 
-# Fetch data from the APIs
-users = requests.get(users_url).json()
-todos = requests.get(todos_url).json()
+    # Fetch all users
+    users = requests.get(f'{base_url}/users').json()
 
-# Dictionary to hold all tasks by user ID
-all_tasks = {}
+    # Dictionary to hold all data
+    all_tasks = {}
 
-# Process each user
-for user in users:
-    user_id = user['id']
-    username = user['username']
-    
-    # Filter tasks by user ID
-    user_tasks = [
-        {
-            "username": username,
-            "task": todo['title'],
-            "completed": todo['completed']
-        }
-        for todo in todos if todo['userId'] == user_id
-    ]
-    
-    # Add to the main dictionary
-    all_tasks[user_id] = user_tasks
+    for user in users:
+        user_id = user['id']
+        username = user['username']
 
-# Export data to JSON file
-with open("todo_all_employees.json", "w") as json_file:
-    json.dump(all_tasks, json_file)
+        # Fetch todos for the current user
+        todos = requests.get(f'{base_url}/todos', params={'userId': user_id}).json()
+
+        # List to store the tasks in the required format
+        user_tasks = []
+        for todo in todos:
+            user_tasks.append({
+                'username': username,
+                'task': todo['title'],
+                'completed': todo['completed']
+            })
+
+        # Assign tasks to the user_id in the dictionary
+        all_tasks[user_id] = user_tasks
+
+    # Write the dictionary to a JSON file
+    with open('todo_all_employees.json', 'w') as json_file:
+        json.dump(all_tasks, json_file)
+
+if __name__ == "__main__":
+    fetch_data()
